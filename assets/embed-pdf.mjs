@@ -24,7 +24,7 @@ async function findEmbedPdfContainers() {
         // Attempt to show paginator and loader if enabled
         embedding.showPaginator();
         embedding.showLoader();
-        await embedding.renderPage(pageNum);
+        await embedding.renderPage(selectedPageNum);
     }
 }
 
@@ -37,7 +37,9 @@ class PdfEmbedding {
     pageRendering;
     pageNumPending = null;
     paginator;
-
+    scale = 3;
+    #pageNum = 1;
+    pdfDoc;
 
     constructor(
         pdfDoc,
@@ -47,23 +49,31 @@ class PdfEmbedding {
         hideLoader
     ) {
         // Change the Scale value for lower or higher resolution.
-        this.paginator = document.getElementById(`pdf-paginator-${urlHash}`);
+        this.paginator = document.querySelector(`#pdf-paginator-${urlHash}`);
+        this.loadingWrapper = document.querySelector(`#pdf-loadingWrapper-${urlHash}`);
+        this.canvas = document.querySelector(`#pdf-canvas-${urlHash}`);
         this.pageRendering = false;
         this.hidePaginator = hidePaginator;
         this.hideLoader = hideLoader;
-        this.pageNum = selectedPageNum;
-        this.scale = 3;
+        this.#pageNum = selectedPageNum;
         this.pdfDoc = pdfDoc;
+        this.urlHash = urlHash;
+        
         const numPages = pdfDoc.numPages;
-        document.getElementById(`pdf-pagecount-${urlHash}`).textContent = numPages;
+        const pageCountElement = document.getElementById(`pdf-pagecount-${urlHash}`);
+        pageCountElement.textContent = numPages;
 
         // If the user passed in a number that is out of range, render the last page.
-        if (this.pageNum > numPages) {
-            this.pageNum = numPages
+        if (this.#pageNum > numPages) {
+            this.#pageNum = numPages
         }
 
-        document.getElementById(`pdf-prev-${urlHash}`).addEventListener('click', this.onPrevPage);
-        document.getElementById(`pdf-next-${urlHash}`).addEventListener('click', this.onNextPage);
+        document
+            .getElementById(`pdf-prev-${urlHash}`)
+            .addEventListener('click', this.onPrevPage);
+        document
+            .getElementById(`pdf-next-${urlHash}`)
+            .addEventListener('click', this.onNextPage);
     }
 
     /**
@@ -73,12 +83,11 @@ class PdfEmbedding {
     async renderPage(num) {
         this.pageRendering = true;
         // Using promise to fetch the page
-        const canvas = document.getElementById(`pdf-canvas-${this.urlHash}`);
-        const ctx = canvas.getContext('2d');
-        const page = await pdfDoc.getPage(num);
-        const viewport = page.getViewport({scale: scale});
-        canvas.height = viewport.height;
-        canvas.width = viewport.width;
+        const ctx = this.canvas.getContext('2d');
+        const page = await this.pdfDoc.getPage(num);
+        const viewport = page.getViewport({scale: this.scale});
+        this.canvas.height = viewport.height;
+        this.canvas.width = viewport.width;
 
         // Render PDF page into canvas context
         const renderContext = {
@@ -106,10 +115,8 @@ class PdfEmbedding {
      * Hides loader and shows canvas
      */
     showContent() {
-        const canvas = document.getElementById(`pdf-canvas-${this.urlHash}`);
-        const loadingWrapper = document.getElementById(`pdf-loadingWrapper-${this.urlHash}`);
-        loadingWrapper.style.display = 'none';
-        canvas.style.display = 'block';
+        this.loadingWrapper.style.display = 'none';
+        this.canvas.style.display = 'block';
     }
 
     /**
@@ -120,10 +127,8 @@ class PdfEmbedding {
             return;
         }
 
-        const canvas = document.getElementById(`pdf-canvas-${this.urlHash}`);
-        const loadingWrapper = document.getElementById(`pdf-loadingWrapper-${this.urlHash}`);
-        loadingWrapper.style.display = 'flex';
-        canvas.style.display = 'none';
+        this.loadingWrapper.style.display = 'flex';
+        this.canvas.style.display = 'none';
     }
 
     /**
@@ -151,23 +156,23 @@ class PdfEmbedding {
     /**
      * Displays previous page.
      */
-    async onPrevPage() {
-        if (pageNum <= 1) {
+    onPrevPage = async (e) => {
+        if (this.#pageNum <= 1) {
             return;
         }
-        pageNum--;
-        await this.queueRenderPage(pageNum);
+        this.#pageNum--;
+        await this.queueRenderPage(this.#pageNum);
     }
 
     /**
      * Displays next page.
      */
-    async onNextPage() {
-        if (pageNum >= pdfDoc.numPages) {
+    onNextPage = async (e) => {
+        if (this.#pageNum >= this.pdfDoc.numPages) {
             return;
         }
-        pageNum++;
-        await this.queueRenderPage(pageNum);
+        this.#pageNum++;
+        await this.queueRenderPage(this.#pageNum);
     }
 }
 

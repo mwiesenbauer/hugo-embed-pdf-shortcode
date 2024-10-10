@@ -1,12 +1,16 @@
-{{- if not ($.Page.Scratch.Get "embed-pdf-count") -}}
+{{ if not ($.Page.Scratch.Get "embed-pdf-count") }}
 
-<script src="//mozilla.github.io/pdf.js/build/pdf.mjs" type="module"></script>
-<script type="module" src="/assets/embed-pdf.mjs"></script>
-<link rel="stylesheet" href="/assets/embed-pdf.css"/>
+<script src="https://mozilla.github.io/pdf.js/build/pdf.mjs" type="module" crossorigin="anonymous" defer></script>
 
-{{- end -}}
+{{ $js := resources.Get "embed-pdf/embed-pdf.mjs" }}
+<script src="{{ $js.RelPermalink }}" type="module" crossorigin="anonymous" defer></script>
+{{ $css := resources.Get "embed-pdf/embed-pdf.css" }}
 
-{{- $.Page.Scratch.Add "embed-pdf-count" 1 -}}
+<link rel="stylesheet" href="{{ $css.RelPermalink }}"/>
+
+{{ end }}
+
+{{ $.Page.Scratch.Add "embed-pdf-count" 1 }}
 
 {{- $documentUrl := .Get "url" -}}
 {{- $urlHash := substr (.Get "url" | md5) 0 8 -}}
@@ -24,7 +28,7 @@
         <div class="pdf-loadingWrapper" id="pdf-loadingWrapper-{{ $urlHash }}">
             <div class="pdf-loading" id="pdf-loading-{{ $urlHash }}"></div>
         </div>
-        <div id="overlayText">
+        <div id="embed-pdf-overlayText-{{ $urlHash }}" class="embed-pdf-overlay-text">
             <a href="{{ $documentUrl }}" aria-label="Download" download>
                 <svg aria-hidden="true" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 18 18">
                     <path d="M9 13c.3 0 .5-.1.7-.3L15.4 7 14 5.6l-4 4V1H8v8.6l-4-4L2.6 7l5.7 5.7c.2.2.4.3.7.3zm-7 2h14v2H2z"/>

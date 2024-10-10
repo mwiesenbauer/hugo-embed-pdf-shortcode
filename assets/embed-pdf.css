@@ -33,13 +33,13 @@
     -webkit-animation: spin 1s ease-in-out infinite;
 }
 
-#overlayText {
+.embed-pdf-overlay-text {
     word-wrap: break-word;
     display: grid;
     justify-content: end;
 }
 
-#overlayText a {
+.embed-pdf-overlay-text a {
     position: relative;
     top: 10px;
     right: 4px;
@@ -53,7 +53,7 @@
     text-decoration: none;
 }
 
-#overlayText svg {
+.embed-pdf-overlay-text svg {
     height: clamp(1em, 2vw, 1.4em);
     width: clamp(1em, 2vw, 1.4em);
 }
