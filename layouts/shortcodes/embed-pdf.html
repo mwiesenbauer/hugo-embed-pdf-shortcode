@@ -1,4 +1,5 @@
-<!--{{ if not ($.Page.Scratch.Get "embed-pdf-count") }}-->
+{{ $noop := $.Page.Content }}
+{{ if not ($.Page.Scratch.Get "embed-pdf-count") }}
 
 <script src="https://mozilla.github.io/pdf.js/build/pdf.mjs" type="module" crossorigin="anonymous" defer></script>
 
@@ -8,7 +9,7 @@
 
 <link rel="stylesheet" href="{{ $css.RelPermalink }}"/>
 
-<!--{{ end }}-->
+{{ end }}
 
 {{ $.Page.Scratch.Add "embed-pdf-count" 1 }}
 
