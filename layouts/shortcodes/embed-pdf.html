@@ -4,7 +4,20 @@
 <script src="https://mozilla.github.io/pdf.js/build/pdf.mjs" type="module" crossorigin="anonymous" defer></script>
 
 {{ $js := resources.Get "embed-pdf/embed-pdf.mjs" }}
-<script src="{{ $js.RelPermalink }}" type="module" crossorigin="anonymous" defer></script>
+
+{{ $params := (dict "search_config" site.Params.search_config "is_production" hugo.IsProduction ) }}
+{{ $sourceMap := cond hugo.IsProduction "" "inline" }}
+{{ $opts := dict "sourceMap" $sourceMap "minify" hugo.IsProduction "target" "esnext" "format" "esm" "params" $params }}
+{{ $js = $js | js.Build $opts }}
+{{ if hugo.IsProduction }}
+{{ $js = $js | resources.Fingerprint "sha512"  }}
+{{ end }}
+<script
+        src="{{ $js.RelPermalink }}"
+        type="module"
+        {{ if hugo.IsProduction }}integrity="{{ $js.Data.Integrity }}"{{ end }}
+        defer></script>
+
 {{ $css := resources.Get "embed-pdf/embed-pdf.css" }}
 
 <link rel="stylesheet" href="{{ $css.RelPermalink }}"/>
