@@ -1,7 +1,7 @@
 async function findEmbedPdfContainers() {
     // Loaded via <script> tag, create shortcut to access PDF.js exports.
     const {pdfjsLib} = globalThis;
-    pdfjsLib.GlobalWorkerOptions.workerSrc = '//mozilla.github.io/pdf.js/build/pdf.worker.mjs';
+    pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://esm.run/pdfjs-dist/build/pdf.worker.mjs';
 
     const matches = document.querySelectorAll("div[data-document-url]");
     for (let match of matches) {
@@ -58,7 +58,7 @@ class PdfEmbedding {
         this.#pageNum = selectedPageNum;
         this.pdfDoc = pdfDoc;
         this.urlHash = urlHash;
-        
+
         const numPages = pdfDoc.numPages;
         const pageCountElement = document.getElementById(`pdf-pagecount-${urlHash}`);
         pageCountElement.textContent = numPages;
@@ -176,4 +176,4 @@ class PdfEmbedding {
     }
 }
 
-await findEmbedPdfContainers();
+export default await findEmbedPdfContainers();

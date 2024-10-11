@@ -1,7 +1,7 @@
 {{ $noop := $.Page.Content }}
 {{ if not ($.Page.Scratch.Get "embed-pdf-count") }}
 
-<script src="https://mozilla.github.io/pdf.js/build/pdf.mjs" type="module" crossorigin="anonymous" defer></script>
+<script src="https://esm.run/pdfjs-dist" type="module" crossorigin="anonymous"></script>
 
 {{ $js := resources.Get "embed-pdf/embed-pdf.mjs" }}
 
