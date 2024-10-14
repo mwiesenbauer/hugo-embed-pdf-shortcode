@@ -1,7 +1,8 @@
 async function findEmbedPdfContainers() {
     // Loaded via <script> tag, create shortcut to access PDF.js exports.
     const {pdfjsLib} = globalThis;
-    pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://esm.run/pdfjs-dist/build/pdf.worker.mjs';
+    const workerSrc = {{ .Site.Params.PdfJs.WorkerSrc | jsonify }};
+    pdfjsLib.GlobalWorkerOptions.workerSrc = workerSrc;
 
     const matches = document.querySelectorAll("div[data-document-url]");
     for (let match of matches) {

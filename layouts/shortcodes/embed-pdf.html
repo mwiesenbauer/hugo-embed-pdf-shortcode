@@ -1,9 +1,9 @@
 {{ $noop := $.Page.Content }}
 {{ if not ($.Page.Scratch.Get "embed-pdf-count") }}
 
-<script src="https://esm.run/pdfjs-dist" type="module" crossorigin="anonymous"></script>
+<script src="{{ .Site.Params.PdfJs.Src }}" type="module" crossorigin="anonymous"></script>
 
-{{ $js := resources.Get "embed-pdf/embed-pdf.mjs" }}
+{{ $js := resources.Get "embed-pdf/embed-pdf.mjs" | resources.ExecuteAsTemplate "embed-pdf/embed-pdf.mjs" .}}
 
 {{ $params := (dict "search_config" site.Params.search_config "is_production" hugo.IsProduction ) }}
 {{ $sourceMap := cond hugo.IsProduction "" "inline" }}

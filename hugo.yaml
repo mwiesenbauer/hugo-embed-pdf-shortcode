@@ -9,3 +9,8 @@ module:
 
     - source: layouts
       target: layouts
+
+params:
+  pdfjs:
+    Src: "https://esm.run/pdfjs-dist"
+    WorkerSrc: "https://esm.run/pdfjs-dist/build/pdf.worker.mjs"
