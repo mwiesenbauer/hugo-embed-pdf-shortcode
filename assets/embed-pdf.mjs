@@ -29,7 +29,6 @@ async function findEmbedPdfContainers() {
 }
 
 class PdfEmbedding {
-    url;
     urlHash;
     hidePaginator;
     hideLoader;
