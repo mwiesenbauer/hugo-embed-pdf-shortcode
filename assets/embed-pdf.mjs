@@ -7,7 +7,7 @@ async function findEmbedPdfContainers() {
     const matches = document.querySelectorAll("div[data-document-url]");
     for (let match of matches) {
         const url = match.dataset.documentUrl;
-        const loadingTask = pdfjsLib.getDocument(url);
+        const loadingTask = pdfjsLib.getDocument({ url });
         const pdfDocument = await loadingTask.promise;
         const urlHash = match.dataset.documentUrlHash;
 
