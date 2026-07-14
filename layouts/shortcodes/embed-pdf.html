@@ -1,7 +1,7 @@
 {{ $noop := $.Page.Content }}
 {{ if not ($.Page.Scratch.Get "embed-pdf-count") }}
 
-<script src="{{ .Site.Params.PdfJs.Src }}" type="module" crossorigin="anonymous"></script>
+
 
 {{ $js := resources.Get "embed-pdf/embed-pdf.mjs" | resources.ExecuteAsTemplate "embed-pdf/embed-pdf.mjs" .}}
 

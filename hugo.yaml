@@ -12,5 +12,5 @@ module:
 
 params:
   pdfjs:
-    Src: "https://esm.run/pdfjs-dist"
-    WorkerSrc: "https://esm.run/pdfjs-dist/build/pdf.worker.mjs"
+    Src: "https://unpkg.com/pdfjs-dist@6.1.200/build/pdf.mjs"
+    WorkerSrc: "https://unpkg.com/pdfjs-dist@6.1.200/build/pdf.worker.mjs"

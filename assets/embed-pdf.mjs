@@ -1,6 +1,7 @@
+import * as pdfjsLib from {{ .Site.Params.PdfJs.Src | jsonify }};
+
 async function findEmbedPdfContainers() {
-    // Loaded via <script> tag, create shortcut to access PDF.js exports.
-    const {pdfjsLib} = globalThis;
+    // Use explicit ESM import of pdfjs-dist and set worker location.
     const workerSrc = {{ .Site.Params.PdfJs.WorkerSrc | jsonify }};
     pdfjsLib.GlobalWorkerOptions.workerSrc = workerSrc;
 
